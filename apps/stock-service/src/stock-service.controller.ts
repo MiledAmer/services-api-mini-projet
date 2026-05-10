@@ -1,12 +1,18 @@
 import { Controller, Get } from '@nestjs/common';
 import { StockServiceService } from './stock-service.service';
+import {
+  StockServiceControllerMethods,
+  StockServiceController as StockServiceControllerInteface,
+  StockRequest,
+  StockResponse,
+} from 'apps/types/proto/stock';
 
 @Controller()
-export class StockServiceController {
+@StockServiceControllerMethods()
+export class StockServiceController implements StockServiceControllerInteface {
   constructor(private readonly stockServiceService: StockServiceService) {}
 
-  @Get()
-  getHello(): string {
-    return this.stockServiceService.getHello();
+  checkAndReserve(request: StockRequest): StockResponse {
+    return { available: true, message: 'Stock reserved successfully' };
   }
 }
