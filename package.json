@@ -17,9 +17,12 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/mini-project/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/mini-project/test/jest-e2e.json",
+    "proto:gen": "protoc -I=. --plugin=protoc-gen-ts_proto=%cd%\\node_modules\\.bin\\protoc-gen-ts_proto.cmd --ts_proto_out=./types --ts_proto_opt=nestJs=true proto/*.proto"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.14.3",
+    "@grpc/proto-loader": "^0.8.1",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "github:nestjs/config",
     "@nestjs/core": "^11.0.1",
@@ -55,6 +58,7 @@
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
+    "ts-proto": "^2.11.8",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.21.0",
     "typescript": "^5.7.3",
