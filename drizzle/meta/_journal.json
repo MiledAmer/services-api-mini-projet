@@ -15,6 +15,20 @@
       "when": 1778365073978,
       "tag": "0001_lonely_impossible_man",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1778442550225,
+      "tag": "0002_wooden_nighthawk",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1778442775139,
+      "tag": "0003_noisy_titanium_man",
+      "breakpoints": true
     }
   ]
 }

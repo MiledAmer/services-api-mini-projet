@@ -8,3 +8,11 @@ export const products = pgTable('products', {
     price: real('price').notNull(),
     stock: integer('stock').notNull(),
 });
+
+
+export const orders = pgTable('orders', {
+    id: serial('id').primaryKey(),
+    productId: integer('product_id').notNull(),
+    quantity: integer('quantity').notNull(),
+    email: text('email').notNull(),
+});

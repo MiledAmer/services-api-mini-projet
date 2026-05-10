@@ -44,7 +44,8 @@
       "entryFile": "main",
       "sourceRoot": "apps/order-service/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/order-service/tsconfig.app.json"
+        "tsConfigPath": "apps/order-service/tsconfig.app.json",
+        "webpackConfigPath": "apps/order-service/webpack.config.js"
       }
     },
     "query-service": {
