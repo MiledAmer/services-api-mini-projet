@@ -2,6 +2,7 @@ import { Body, Controller, Inject, OnModuleInit, Post } from '@nestjs/common';
 import {
   STOCK_PACKAGE_NAME,
   STOCK_SERVICE_NAME,
+  type StockRequest,
   type StockServiceClient,
 } from 'apps/types/proto/stock';
 import { type ClientGrpc } from '@nestjs/microservices';
@@ -16,7 +17,7 @@ export class StockController implements OnModuleInit {
   }
 
   @Post()
-  check(@Body() body: { productId: number; quantity: number }) {
-    return this.stockService.checkAndReserve({ productId: body.productId, quantity: body.quantity });
+  check(@Body() body: StockRequest) {
+    return this.stockService.checkAndReserve(body);
   }
 }

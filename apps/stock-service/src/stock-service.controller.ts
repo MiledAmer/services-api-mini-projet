@@ -12,7 +12,7 @@ import {
 export class StockServiceController implements StockServiceControllerInteface {
   constructor(private readonly stockServiceService: StockServiceService) {}
 
-  checkAndReserve(request: StockRequest): StockResponse {
-    return { available: true, message: 'Stock reserved successfully' };
+  async checkAndReserve(request: StockRequest): Promise<StockResponse> {
+    return await this.stockServiceService.getStockLevels(request);
   }
 }
