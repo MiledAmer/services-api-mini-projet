@@ -61,7 +61,8 @@
       "entryFile": "main",
       "sourceRoot": "apps/stock-service/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/stock-service/tsconfig.app.json"
+        "tsConfigPath": "apps/stock-service/tsconfig.app.json",
+        "webpackConfigPath": "apps/stock-service/webpack.config.js"
       }
     }
   }

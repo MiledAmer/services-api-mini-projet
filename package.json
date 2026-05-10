@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/mini-project/test/jest-e2e.json",
-    "proto:gen": "protoc -I=. --plugin=protoc-gen-ts_proto=%cd%\\node_modules\\.bin\\protoc-gen-ts_proto.cmd --ts_proto_out=./types --ts_proto_opt=nestJs=true proto/*.proto"
+    "proto:gen": "protoc -I=. --plugin=protoc-gen-ts_proto=%cd%\\node_modules\\.bin\\protoc-gen-ts_proto.cmd --ts_proto_out=./apps/types --ts_proto_opt=nestJs=true proto/*.proto"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.14.3",
@@ -46,6 +46,7 @@
     "@types/node": "^24.0.0",
     "@types/pg": "^8.20.0",
     "@types/supertest": "^7.0.0",
+    "copy-webpack-plugin": "^14.0.0",
     "drizzle-kit": "^0.31.10",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
