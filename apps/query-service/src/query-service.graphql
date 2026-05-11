@@ -1,0 +1,17 @@
+type Product {
+  id: ID!
+  name: String!
+  price: Float!
+  stock: Int!
+}
+type Order {
+  id: ID!
+  productId: ID!
+  quantity: Int!
+  email: String!
+}
+type Query {
+  products: [Product!]!
+  orders: [Order!]!
+  orderById(id: ID!): Order
+}
