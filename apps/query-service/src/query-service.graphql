@@ -9,7 +9,7 @@ type Order @key(fields: "id") {
   id: ID!
   productId: ID!
   quantity: Int!
-  customerEmail: String!
+  email: String!
 }
 
 type Query {

@@ -1,98 +1,153 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# TP — Plateforme Microservices avec NestJS
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+> Plateforme distribuée de gestion de commandes démontrant l'usage combiné de REST, GraphQL, gRPC et Kafka dans une architecture microservices moderne.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Table des matières
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Vue d'ensemble](#vue-densemble)
+- [Stack technique](#stack-technique)
+- [Architecture globale](#architecture-globale)
+- [Services](#services)
+- [Prérequis](#prérequis)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Démarrage](#démarrage)
+- [Migrations de base de données](#migrations-de-base-de-données)
 
-## Project setup
+---
 
-```bash
-$ pnpm install
+## Vue d'ensemble
+
+Ce TP illustre la conception d'une architecture microservices complète autour d'un système de commandes. Chaque service est découplé, responsable d'un domaine métier précis, et communique via le protocole le plus adapté à son cas d'usage :
+
+| Protocole | Cas d'usage dans ce projet |
+|-----------|---------------------------|
+| **REST** | CRUD produits & commandes (client ↔ services) |
+| **GraphQL** | Agrégation de lectures multi-sources |
+| **gRPC** | Validation de stock synchrone inter-services |
+| **Kafka** | Propagation d'événements asynchrone (ex. : commande créée) |
+
+---
+
+## Stack technique
+
+| Catégorie | Technologie |
+|-----------|-------------|
+| Framework | NestJS (monorepo) |
+| Langage | TypeScript |
+| Base de données | PostgreSQL |
+| ORM | Drizzle ORM |
+| API GraphQL | Apollo GraphQL (Federation) |
+| Communication RPC | gRPC |
+| Message broker | Apache Kafka |
+| Conteneurisation | Docker / Docker Compose |
+| Gestionnaire de paquets | pnpm |
+
+---
+
+## Structure du monorepo
+
+```
+.
+├── apps/
+│   ├── catalog-service/
+│   ├── order-service/
+│   ├── stock-service/
+│   ├── notification-service/
+│   ├── query-service/
+│   ├── api-gateway/
+│   └── drizzle/
+├── kafka-kafdrop/          # Docker Compose Kafka
+├── start-services.bat
+└── postman-docs.json
 ```
 
-## Compile and run the project
+---
+
+## Services
+
+| Service | Rôle | Protocoles |
+|---|---|---|
+| `catalog-service` | Gestion du catalogue produits | REST · PostgreSQL |
+| `order-service` | Création et suivi des commandes | REST · gRPC · Kafka |
+| `stock-service` | Validation et réservation du stock | gRPC |
+| `notification-service` | Consommation des événements métier | Kafka |
+| `query-service` | Agrégation des données en lecture | GraphQL |
+| `api-gateway` | Point d'entrée unifié *(optionnel)* | GraphQL Federation |
+
+---
+
+## Prérequis
+
+- [Node.js](https://nodejs.org/) ≥ 18
+- [pnpm](https://pnpm.io/) ≥ 8
+- [Docker](https://www.docker.com/) & Docker Compose
+
+---
+
+## Installation
+
+Cloner le dépôt, puis installer toutes les dépendances du monorepo :
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+pnpm install
 ```
 
-## Run tests
+---
+
+## Configuration
+
+### Variables d'environnement
+
+Créer un fichier `.env` à la racine (ou dans chaque service) avec les variables suivantes :
+
+```env
+DATABASE_URL=postgresql://postgres:postgres_pwd@localhost:5431/postgres
+```
+
+> Adapter les identifiants selon votre environnement local.
+
+---
+
+## Démarrage
+
+### 1. Lancer l'infrastructure (Kafka + Kafdrop)
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+cd kafka-kafdrop
+docker compose up -d
 ```
 
-## Deployment
+> [Kafdrop](https://github.com/obsidiandynamics/kafdrop) est disponible sur `http://localhost:9000` pour visualiser les topics Kafka.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 2. Lancer tous les services
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# Windows
+start-services.bat
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Resources
+## Migrations de base de données
 
-Check out a few resources that may come in handy when working with NestJS:
+Générer et appliquer les migrations Drizzle :
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+# Générer les fichiers de migration
+pnpm drizzle-kit generate
 
-## Support
+# Appliquer les migrations
+pnpm drizzle-kit migrate
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
+## Ressources
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- [NestJS Documentation](https://docs.nestjs.com/)
+- [Drizzle ORM](https://orm.drizzle.team/)
+- [Apollo Federation](https://www.apollographql.com/docs/federation/)
+- [Apache Kafka](https://kafka.apache.org/documentation/)
+- [gRPC](https://grpc.io/docs/)

@@ -19,7 +19,7 @@ export class Order {
     id: string;
     productId: string;
     quantity: number;
-    customerEmail: string;
+    email: string;
 }
 
 export abstract class IQuery {
