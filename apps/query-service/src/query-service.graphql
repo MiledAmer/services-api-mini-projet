@@ -1,15 +1,17 @@
-type Product {
+type Product @key(fields: "id") {
   id: ID!
   name: String!
   price: Float!
   stock: Int!
 }
-type Order {
+
+type Order @key(fields: "id") {
   id: ID!
   productId: ID!
   quantity: Int!
-  email: String!
+  customerEmail: String!
 }
+
 type Query {
   products: [Product!]!
   orders: [Order!]!

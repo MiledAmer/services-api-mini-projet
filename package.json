@@ -21,6 +21,7 @@
     "proto:gen": "protoc -I=. --plugin=protoc-gen-ts_proto=%cd%\\node_modules\\.bin\\protoc-gen-ts_proto.cmd --ts_proto_out=./apps/types --ts_proto_opt=nestJs=true proto/*.proto"
   },
   "dependencies": {
+    "@apollo/gateway": "^2.14.0",
     "@apollo/server": "^5.5.1",
     "@apollo/subgraph": "^2.14.0",
     "@as-integrations/express5": "^1.1.2",
