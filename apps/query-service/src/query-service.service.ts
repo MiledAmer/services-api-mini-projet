@@ -19,7 +19,6 @@ export class QueryServiceService {
 
   async findOneOrder(id: number) {
     const order = await this.drizzle.select().from(schema.orders).where(eq(schema.orders.id, id));
-
-    return order;
+    return order[0];
   }
 }

@@ -6,30 +6,11 @@
 
 ## Table des matières
 
-- [Vue d'ensemble](#vue-densemble)
 - [Stack technique](#stack-technique)
 - [Architecture globale](#architecture-globale)
 - [Services](#services)
-- [Prérequis](#prérequis)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Démarrage](#démarrage)
-- [Migrations de base de données](#migrations-de-base-de-données)
+- [Demarrage](#Demarrage)
 
----
-
-## Vue d'ensemble
-
-Ce TP illustre la conception d'une architecture microservices complète autour d'un système de commandes. Chaque service est découplé, responsable d'un domaine métier précis, et communique via le protocole le plus adapté à son cas d'usage :
-
-| Protocole | Cas d'usage dans ce projet |
-|-----------|---------------------------|
-| **REST** | CRUD produits & commandes (client ↔ services) |
-| **GraphQL** | Agrégation de lectures multi-sources |
-| **gRPC** | Validation de stock synchrone inter-services |
-| **Kafka** | Propagation d'événements asynchrone (ex. : commande créée) |
-
----
 
 ## Stack technique
 
@@ -59,7 +40,8 @@ Ce TP illustre la conception d'une architecture microservices complète autour d
 │   ├── query-service/
 │   ├── api-gateway/
 │   └── drizzle/
-├── kafka-kafdrop/          # Docker Compose Kafka
+├── images/                     # containing Postman test images
+├── docker-compose.yml          # Docker Compose Kafka
 ├── start-services.bat
 └── postman-docs.json
 ```
@@ -79,15 +61,18 @@ Ce TP illustre la conception d'une architecture microservices complète autour d
 
 ---
 
-## Prérequis
+## Demarrage
+
+### Prérequis
 
 - [Node.js](https://nodejs.org/) ≥ 18
 - [pnpm](https://pnpm.io/) ≥ 8
 - [Docker](https://www.docker.com/) & Docker Compose
 
----
 
-## Installation
+
+
+### Installation
 
 Cloner le dépôt, puis installer toutes les dépendances du monorepo :
 
@@ -97,41 +82,26 @@ pnpm install
 
 ---
 
-## Configuration
+### Configuration
 
-### Variables d'environnement
+#### Variables d'environnement
 
-Créer un fichier `.env` à la racine (ou dans chaque service) avec les variables suivantes :
-
-```env
-DATABASE_URL=postgresql://postgres:postgres_pwd@localhost:5431/postgres
+```bash
+mv .env.exemple .env
 ```
-
-> Adapter les identifiants selon votre environnement local.
 
 ---
 
-## Démarrage
 
-### 1. Lancer l'infrastructure (Kafka + Kafdrop)
+#### 1. Lancer l'infrastructure (Kafka + Kafdrop + postgres)
 
 ```bash
-cd kafka-kafdrop
 docker compose up -d
 ```
 
 > [Kafdrop](https://github.com/obsidiandynamics/kafdrop) est disponible sur `http://localhost:9000` pour visualiser les topics Kafka.
 
-### 2. Lancer tous les services
-
-```bash
-# Windows
-start-services.bat
-```
-
----
-
-## Migrations de base de données
+### Migrations de base de données
 
 Générer et appliquer les migrations Drizzle :
 
@@ -142,6 +112,27 @@ pnpm drizzle-kit generate
 # Appliquer les migrations
 pnpm drizzle-kit migrate
 ```
+
+
+#### 2. Lancer tous les services
+
+```bash
+# Windows
+start-services.bat
+```
+or manually ( recommanded )
+ 
+ ```bash
+nest start catalog-service --watch
+nest start notification-service --watch
+nest start order-service --watch
+nest start query-service --watch
+nest start stock-service --watch
+nest start api-gateway --watch
+```
+
+---
+
 
 
 ## Ressources
