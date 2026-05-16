@@ -87,7 +87,7 @@ pnpm install
 #### Variables d'environnement
 
 ```bash
-mv .env.exemple .env
+mv .env.example .env
 ```
 
 ---
